@@ -24,11 +24,11 @@ resources:
     testQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: !Sub "testQueue-${STAGE}"
+        QueueName: ${STAGE}-testQueue
     demoQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: !Sub "demoQueue-${STAGE}"
+        QueueName: ${STAGE}-demoQueue
     
     TestQueuePublishRole:
       Type: AWS::IAM::Role
