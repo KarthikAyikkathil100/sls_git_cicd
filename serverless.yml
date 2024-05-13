@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: us-east-1
+  stage: ${opt:stage, self:provider.stage, 'dev'}
 
 package:
   individually: true
@@ -14,6 +15,7 @@ package:
 custom:
   ACCOUNT_ID: !Ref AWS::AccountId
   REGION: !Ref AWS::Region
+  STAGE: ${self:provider.stage}
   hooks:
     'before:deploy:createDeploymentArtifacts': cd controllers/test && npm install # (This is not working, but added so that in future we can find out it's use)
 
@@ -22,11 +24,11 @@ resources:
     testQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: "testQueue"
+        QueueName: !Sub "testQueue-${STAGE}"
     demoQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: "demoQueue"
+        QueueName: "demoQueue-${STAGE}"
     
     TestQueuePublishRole:
       Type: AWS::IAM::Role
@@ -136,10 +138,11 @@ resources:
 layers:
   UtilsLayer:
     path: './layers/utils/'
-    name: 'UtilsLayer'
+    name: 'UtilsLayer-${STAGE}'
 
 functions:
   testFunction:
+  name: "Test-Function-${STAGE}"
     runtime: nodejs18.x
     handler: './controllers/test/test.handler'
     events: 
@@ -152,6 +155,7 @@ functions:
       QueueURL: !Ref testQueue
   
   demoFunction:
+    name: "Demo-Function-${STAGE}"
     runtime: nodejs18.x
     handler: './controllers/test/demo_run.handler'
     events: 
@@ -167,6 +171,7 @@ functions:
 
   
   publisherFunction:
+    name: "Publisher-Function-${STAGE}"
     runtime: nodejs18.x
     handler: './controllers/test/sqsPublisher.handler'
     role: TestQueuePublishRole
