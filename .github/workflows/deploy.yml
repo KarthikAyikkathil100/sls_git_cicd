@@ -12,12 +12,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       - name: Install Serverless Framework
         run: npm install -g serverless
 
-      - name: Print LS Output
-        run: ls -la
+      - name: install layers dependencies
+        run: |
+          cd layers/utils/nodejs/node18/node_modules/@AwsHelpers
+          npm install
 
       - name: test echo
         env:
@@ -27,7 +29,7 @@ jobs:
         run: |
           echo "key : $AWS_ACCESS_KEY_ID"
 
-      - name: set sls creds
+      - name: Deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
