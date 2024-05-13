@@ -28,7 +28,7 @@ resources:
     demoQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: "demoQueue-${STAGE}"
+        QueueName: !Sub "demoQueue-${STAGE}"
     
     TestQueuePublishRole:
       Type: AWS::IAM::Role
@@ -138,11 +138,11 @@ resources:
 layers:
   UtilsLayer:
     path: './layers/utils/'
-    name: 'UtilsLayer-${STAGE}'
+    name: !Sub 'UtilsLayer-${STAGE}'
 
 functions:
   testFunction:
-    name: "Test-Function-${STAGE}"
+    name: !Sub "Test-Function-${STAGE}"
     runtime: nodejs18.x
     handler: './controllers/test/test.handler'
     events: 
@@ -155,7 +155,7 @@ functions:
       QueueURL: !Ref testQueue
   
   demoFunction:
-    name: "Demo-Function-${STAGE}"
+    name: !Sub "Demo-Function-${STAGE}"
     runtime: nodejs18.x
     handler: './controllers/test/demo_run.handler'
     events: 
@@ -171,7 +171,7 @@ functions:
 
   
   publisherFunction:
-    name: "Publisher-Function-${STAGE}"
+    name: !Sub "Publisher-Function-${STAGE}"
     runtime: nodejs18.x
     handler: './controllers/test/sqsPublisher.handler'
     role: TestQueuePublishRole
