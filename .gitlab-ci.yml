@@ -1,0 +1,16 @@
+stages:
+  - staging
+  - production_deploy
+
+
+staging:
+  stage: staging
+  only:
+    - staging
+  variables:
+    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+  script:
+    - npm i -g serverless
+    - sls deploy --dev staging --aws-key $AWS_ACCESS_KEY_ID --aws-secret $AWS_SECRET_ACCESS_KEY
+  
