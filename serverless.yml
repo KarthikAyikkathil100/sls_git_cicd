@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: us-east-1
-  stage: ${opt:stage, self:provider.stage, 'dev'}
+  stage: ${opt:stage}
 
 package:
   individually: true
@@ -138,11 +138,11 @@ resources:
 layers:
   UtilsLayer:
     path: './layers/utils/'
-    name: !Sub 'UtilsLayer-${STAGE}'
+    name: 'UtilsLayer'
 
 functions:
   testFunction:
-    name: !Sub Test-Function-${STAGE}
+    name: ${STAGE}-Test-Function
     runtime: nodejs18.x
     handler: './controllers/test/test.handler'
     events: 
@@ -155,7 +155,7 @@ functions:
       QueueURL: !Ref testQueue
   
   demoFunction:
-    name: !Sub Demo-Function-${STAGE}
+    name: ${STAGE}-Demo-Function
     runtime: nodejs18.x
     handler: './controllers/test/demo_run.handler'
     events: 
@@ -171,7 +171,7 @@ functions:
 
   
   publisherFunction:
-    name: !Sub Publisher-Function-${STAGE}
+    name: ${STAGE}-Publisher-Function
     runtime: nodejs18.x
     handler: './controllers/test/sqsPublisher.handler'
     role: TestQueuePublishRole
