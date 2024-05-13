@@ -7,7 +7,7 @@ exports.handler = async (event, context, callback) => {
         // This fn should push record to queue
         callback( null, {
             body: JSON.stringify( {
-                messages: 'Successs',
+                messages: 'Updated success response!!',
             } ),
             statusCode: 200
         } )
