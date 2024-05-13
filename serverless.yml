@@ -142,7 +142,7 @@ layers:
 
 functions:
   testFunction:
-  name: "Test-Function-${STAGE}"
+    name: "Test-Function-${STAGE}"
     runtime: nodejs18.x
     handler: './controllers/test/test.handler'
     events: 
