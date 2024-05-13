@@ -15,7 +15,7 @@ jobs:
         run: npm install -g serverless
 
       - name: set sls creds
-        run: sls --config credentials --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
+        run: serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
       
       - name: Deploy to Staging
         env:
