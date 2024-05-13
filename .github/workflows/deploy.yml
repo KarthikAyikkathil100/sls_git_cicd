@@ -1,16 +1,22 @@
-stages:
-  - staging
-  - production_deploy
+name: Deployment Workflow
 
+on:
+  push:
+    branches:
+      - staging  # Assuming you want to trigger this on pushes to the main branch
 
-staging:
-  stage: staging
-  only:
-    - staging
-  variables:
-    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
-    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
-  script:
-    - npm i -g serverless
-    - sls deploy --dev staging --aws-key $AWS_ACCESS_KEY_ID --aws-secret $AWS_SECRET_ACCESS_KEY
-  
+jobs:
+  deploy_staging:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/staging'  # Only run this job on the staging branch
+
+    steps:
+      - name: Install Serverless Framework
+        run: npm install -g serverless
+
+      - name: Deploy to Staging
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+        run: |
+          sls deploy --stage staging --aws-key $AWS_ACCESS_KEY_ID --aws-secret $AWS_SECRET_ACCESS_KEY
