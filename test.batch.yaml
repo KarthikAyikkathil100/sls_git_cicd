@@ -1,0 +1,56 @@
+service: my-aws-batch-service
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-1
+
+functions:
+  myBatchFunction:
+    handler: handler.batchFunction
+    timeout: 300 # or whatever timeout you need
+    environment:
+      VARIABLE_NAME: value # any environment variables needed
+
+resources:
+  Resources:
+    myBatchJobDefinition:
+      Type: AWS::Batch::JobDefinition
+      Properties:
+        Type: container
+        ContainerProperties:
+          Image: my-docker-image:latest
+          Memory: 2048 # Memory in MiB
+          Vcpus: 1 # Number of vCPUs
+          Command:
+            - my_command
+          Environment:
+            - Name: VARIABLE_NAME
+              Value: value
+          JobRoleArn: arn:aws:iam::123456789012:role/ecsTaskExecutionRole # Role with necessary permissions
+          RetryStrategy:
+            Attempts: 3 # Number of attempts to retry upon failure
+    myBatchQueue:
+      Type: AWS::Batch::JobQueue
+      Properties:
+        Priority: 1
+        ComputeEnvironmentOrder:
+          - Order: 1
+            ComputeEnvironment: arn:aws:batch:us-east-1:123456789012:compute-environment/myComputeEnvironment
+
+    myBatchComputeEnvironment:
+      Type: AWS::Batch::ComputeEnvironment
+      Properties:
+        Type: MANAGED # or EC2 for EC2-based environment
+        ServiceRole: arn:aws:iam::123456789012:role/service-role/AWSBatchServiceRole
+        ComputeResources:
+          MinvCpus: 0
+          MaxvCpus: 256
+          DesiredvCpus: 0
+          InstanceRole: arn:aws:iam::123456789012:instance-profile/ecsInstanceRole
+          InstanceTypes:
+            - optimal # or specify specific instance types
+          Subnets:
+            - subnet-12345678
+          SecurityGroupIds:
+            - sg-12345678
