@@ -142,7 +142,7 @@ layers:
 
 functions:
   testFunction:
-    name: !Sub "Test-Function-${STAGE}"
+    name: !Sub Test-Function-${STAGE}
     runtime: nodejs18.x
     handler: './controllers/test/test.handler'
     events: 
@@ -155,7 +155,7 @@ functions:
       QueueURL: !Ref testQueue
   
   demoFunction:
-    name: !Sub "Demo-Function-${STAGE}"
+    name: !Sub Demo-Function-${STAGE}
     runtime: nodejs18.x
     handler: './controllers/test/demo_run.handler'
     events: 
@@ -171,7 +171,7 @@ functions:
 
   
   publisherFunction:
-    name: !Sub "Publisher-Function-${STAGE}"
+    name: !Sub Publisher-Function-${STAGE}
     runtime: nodejs18.x
     handler: './controllers/test/sqsPublisher.handler'
     role: TestQueuePublishRole
