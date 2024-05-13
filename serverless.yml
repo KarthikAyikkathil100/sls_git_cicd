@@ -55,83 +55,83 @@ resources:
                   Resource: !GetAtt testQueue.Arn
 
     # ---- Batch related configuration ---
-    JobExecutionRole:
-      Type: AWS::IAM::Role
-      Properties:
-        RoleName: 'BatchjobExecutionRole'
-        AssumeRolePolicyDocument: # This is a required property, this defines to what or whom this role can be applied
-          Version: '2012-10-17'
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service:  # This defines the resource/service/user..etc to which the role can be applied
-                  - ecs-tasks.amazonaws.com # Here, this role can be assigned to any of the ECS
-              Action: 
-                - sts:AssumeRole # This action can be taken by the above mentioned resource/service/user. (sts:AssumeRole means the person in Principal can assume this role, in our case we are giving power to all lambda function to assume this role, if role got assigned to a lambda fn)
-        Policies:
-          - PolicyName: JobexecutionPolicy
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - 'ecr:GetAuthorizationToken'
-                    - 'ecr:BatchCheckLayerAvailability'
-                    - 'ecr:GetDownloadUrlForLayer'
-                    - 'ecr:BatchGetImage'
-                    - 'logs:CreateLogStream'
-                    - 'logs:PutLogEvents'
-                  Resource: '*'
-        ManagedPolicyArns:
-          - arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole
+    # JobExecutionRole:
+    #   Type: AWS::IAM::Role
+    #   Properties:
+    #     RoleName: 'BatchjobExecutionRole'
+    #     AssumeRolePolicyDocument: # This is a required property, this defines to what or whom this role can be applied
+    #       Version: '2012-10-17'
+    #       Statement:
+    #         - Effect: Allow
+    #           Principal:
+    #             Service:  # This defines the resource/service/user..etc to which the role can be applied
+    #               - ecs-tasks.amazonaws.com # Here, this role can be assigned to any of the ECS
+    #           Action: 
+    #             - sts:AssumeRole # This action can be taken by the above mentioned resource/service/user. (sts:AssumeRole means the person in Principal can assume this role, in our case we are giving power to all lambda function to assume this role, if role got assigned to a lambda fn)
+    #     Policies:
+    #       - PolicyName: JobexecutionPolicy
+    #         PolicyDocument:
+    #           Version: '2012-10-17'
+    #           Statement:
+    #             - Effect: Allow
+    #               Action:
+    #                 - 'ecr:GetAuthorizationToken'
+    #                 - 'ecr:BatchCheckLayerAvailability'
+    #                 - 'ecr:GetDownloadUrlForLayer'
+    #                 - 'ecr:BatchGetImage'
+    #                 - 'logs:CreateLogStream'
+    #                 - 'logs:PutLogEvents'
+    #               Resource: '*'
+    #     ManagedPolicyArns:
+    #       - arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole
 
     
-    # not specifying ServiceRole as it's specified in docs, it's not needed. If not specified here, it will create on it's own
-    batchComputeEnvironment:
-      Type: 'AWS::Batch::ComputeEnvironment'
-      Properties: 
-        Type: 'MANAGED'
-        ComputeEnvironmentName: 'BatchComputeEnv'
-        ComputeResources:
-          AllocationStrategy: 'BEST_FIT'
-          MaxvCpus: 3
-          Type: 'FARGATE'
+    # # not specifying ServiceRole as it's specified in docs, it's not needed. If not specified here, it will create on it's own
+    # batchComputeEnvironment:
+    #   Type: 'AWS::Batch::ComputeEnvironment'
+    #   Properties: 
+    #     Type: 'MANAGED'
+    #     ComputeEnvironmentName: 'BatchComputeEnv'
+    #     ComputeResources:
+    #       AllocationStrategy: 'BEST_FIT'
+    #       MaxvCpus: 3
+    #       Type: 'FARGATE'
           
 
-    testJobDefination:
-      Type: AWS::Batch::JobDefinition
-      Properties:
-        Type: container
-        JobDefinitionName: 'BatchJobDef'
-        PlatformCapabilities:
-          - FARGATE
-        Timeout: 
-          AttemptDurationSeconds: 7200
-        ContainerProperties:
-          Image: $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/test:latest
-          Memory: 2048 # Memory in MiB
-          Vcpus: 1 # Number of vCPUs
-          ExecutionRoleArn: !GetAtt JobExecutionRole.Arn # Role with necessary permissions
-          RetryStrategy:
-            Attempts: 3 # Number of attempts to retry upon failure
-          NetworkConfiguration:
-            AssignPublicIp: 'DISABLED'
-          ReadonlyRootFilesystem: true
-          ResourceRequirements:
-            - Type: MEMORY
-              Value: '1024'
-            - Type: VCPU
-              Value: '0.5'
+    # testJobDefination:
+    #   Type: AWS::Batch::JobDefinition
+    #   Properties:
+    #     Type: container
+    #     JobDefinitionName: 'BatchJobDef'
+    #     PlatformCapabilities:
+    #       - FARGATE
+    #     Timeout: 
+    #       AttemptDurationSeconds: 7200
+    #     ContainerProperties:
+    #       Image: $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/test:latest
+    #       Memory: 2048 # Memory in MiB
+    #       Vcpus: 1 # Number of vCPUs
+    #       ExecutionRoleArn: !GetAtt JobExecutionRole.Arn # Role with necessary permissions
+    #       RetryStrategy:
+    #         Attempts: 3 # Number of attempts to retry upon failure
+    #       NetworkConfiguration:
+    #         AssignPublicIp: 'DISABLED'
+    #       ReadonlyRootFilesystem: true
+    #       ResourceRequirements:
+    #         - Type: MEMORY
+    #           Value: '1024'
+    #         - Type: VCPU
+    #           Value: '0.5'
           
 
-    myBatchQueue:
-      Type: AWS::Batch::JobQueue
-      Properties:
-        Priority: 1
-        State: 'ENABLED'
-        ComputeEnvironmentOrder:
-          - Order: 1
-            ComputeEnvironment: !GetAtt batchComputeEnvironment.Arn
+    # myBatchQueue:
+    #   Type: AWS::Batch::JobQueue
+    #   Properties:
+    #     Priority: 1
+    #     State: 'ENABLED'
+    #     ComputeEnvironmentOrder:
+    #       - Order: 1
+    #         ComputeEnvironment: !GetAtt batchComputeEnvironment.Arn
 
     # ------ End of Batch related configuration ----------          
 layers:
