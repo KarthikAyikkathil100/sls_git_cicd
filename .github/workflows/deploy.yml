@@ -13,7 +13,7 @@ jobs:
       - name: Install Serverless Framework
         run: npm install -g serverless
 
-       - name: Print LS Output
+      - name: Print LS Output
         run: ls -la
 
       - name: test echo
