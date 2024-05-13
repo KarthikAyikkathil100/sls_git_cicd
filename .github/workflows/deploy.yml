@@ -28,4 +28,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
         run: |
           serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
-          sls deploy --stage dev --config severless.yaml
+          sls deploy --stage dev
