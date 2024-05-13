@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - staging  # Assuming you want to trigger this on pushes to the main branch
-
 jobs:
   deploy_staging:
     runs-on: ubuntu-latest
@@ -32,4 +31,5 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
         run: |
+          cd ../
           sls deploy --stage dev
