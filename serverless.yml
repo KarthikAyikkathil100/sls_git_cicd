@@ -138,7 +138,7 @@ resources:
 layers:
   UtilsLayer:
     path: './layers/utils/'
-    name: 'UtilsLayer'
+    name: ${self:custom.STAGE}-UtilsLayer
 
 functions:
   testFunction:
