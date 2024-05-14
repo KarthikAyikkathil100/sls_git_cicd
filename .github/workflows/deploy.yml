@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - staging  # Assuming you want to trigger this on pushes to the main branch
+      - master
 jobs:
   deploy_staging:
     runs-on: ubuntu-latest
@@ -36,3 +37,27 @@ jobs:
         run: |
           serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
           sls deploy --stage staging
+
+  deploy_production:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'  # Only run this job on the master branch
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Serverless Framework
+        run: npm install -g serverless
+
+      - name: install layers dependencies
+        run: |
+          cd layers/utils/nodejs/node18/node_modules/@AwsHelpers
+          npm install
+
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+        run: |
+          serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
+          sls deploy --stage prod

@@ -24,16 +24,16 @@ resources:
     testQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${STAGE}-testQueue
+        QueueName: ${self:custom.STAGE}-testQueue
     demoQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${STAGE}-demoQueue
+        QueueName: ${self:custom.STAGE}-demoQueue
     
     TestQueuePublishRole:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: TestQueuePublishRole
+        RoleName: ${self:custom.STAGE}-TestQueuePublishRole
         AssumeRolePolicyDocument: # This is a required property, this defines to what or whom this role can be applied
           Version: '2012-10-17'
           Statement:
@@ -142,7 +142,7 @@ layers:
 
 functions:
   testFunction:
-    name: ${STAGE}-Test-Function
+    name: ${self:custom.STAGE}-Test-Function
     runtime: nodejs18.x
     handler: './controllers/test/test.handler'
     events: 
@@ -155,7 +155,7 @@ functions:
       QueueURL: !Ref testQueue
   
   demoFunction:
-    name: ${STAGE}-Demo-Function
+    name: ${self:custom.STAGE}-Demo-Function
     runtime: nodejs18.x
     handler: './controllers/test/demo_run.handler'
     events: 
@@ -171,7 +171,7 @@ functions:
 
   
   publisherFunction:
-    name: ${STAGE}-Publisher-Function
+    name: ${self:custom.STAGE}-Publisher-Function
     runtime: nodejs18.x
     handler: './controllers/test/sqsPublisher.handler'
     role: TestQueuePublishRole
