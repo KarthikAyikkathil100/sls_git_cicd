@@ -22,11 +22,6 @@ jobs:
           cd layers/utils/nodejs/node18/node_modules/@AwsHelpers
           npm install
 
-      - name: install controllers dependencies
-        run: |
-          cd controllers/test
-          npm install
-
       - name: Deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
