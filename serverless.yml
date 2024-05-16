@@ -154,6 +154,15 @@ functions:
     environment: 
       QueueURL: !Ref testQueue
   
+  testFunction2:
+    name: ${self:custom.STAGE}-Test-Function2
+    runtime: nodejs18.x
+    handler: './controllers/test2/test_run.handler'
+    events: 
+      - http:
+          path: '/url/test2'
+          method: 'get'
+  
   demoFunction:
     name: ${self:custom.STAGE}-Demo-Function
     runtime: nodejs18.x
