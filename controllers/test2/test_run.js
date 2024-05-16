@@ -6,7 +6,7 @@ exports.handler = async (event, context, callback) => {
         // This fn should push record to queue
         addUpdateBonusValidation({
             id: "dcv"
-        }, async (validate) => {
+        }, async (validate, message) => {
             console.log('validate => ', validate)
             if (validate) {
                 callback( null, {

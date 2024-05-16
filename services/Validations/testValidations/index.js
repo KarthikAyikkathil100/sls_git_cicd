@@ -9,8 +9,8 @@ module.exports = {
         });
         const { error } = schema.validate(req);
         if (error) {
-          return Helper.validationMessageKey("addUpdateBonusValidation", error)
+          return callback(false, Helper.validationMessageKey("addUpdateBonusValidation", error))
         }
-        return callback(true);
+        return callback(true, '');
       },
 }
