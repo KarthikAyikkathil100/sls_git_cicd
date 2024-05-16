@@ -21,6 +21,9 @@ jobs:
         run: |
           cd layers/utils/nodejs/node18/node_modules/@AwsHelpers
           npm install
+          cd ~
+          cd layers/utils/nodejs/node18/node_modules/@Validations
+          npm install
 
       - name: Deploy
         env:
