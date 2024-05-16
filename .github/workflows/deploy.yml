@@ -17,11 +17,13 @@ jobs:
       - name: Install Serverless Framework
         run: npm install -g serverless
 
-      - name: install layers dependencies
+      - name: install AWS dependencies
         run: |
           cd layers/utils/nodejs/node18/node_modules/@AwsHelpers
           npm install
-          cd ~
+
+      - name: install Validations dependencies
+        run: |
           cd layers/utils/nodejs/node18/node_modules/@Validations
           npm install
 
