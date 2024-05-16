@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1609.0"
+    "@hapi/joi": "^17.1.1"
   }
 }
