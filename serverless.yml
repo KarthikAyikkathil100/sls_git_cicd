@@ -164,7 +164,7 @@ functions:
           path: '/url/test2'
           method: 'get'
     package:
-      include:
+      patterns:
         - controllers/test2/*
         - services/**
         - layers/**
