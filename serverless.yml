@@ -147,7 +147,6 @@ functions:
     name: ${self:custom.STAGE}-Test-Function
     runtime: nodejs18.x
     handler: './controllers/test/test.handler'
-    cors: true
     package:
       patterns:
         - 'controllers/**'
@@ -155,6 +154,7 @@ functions:
       - http:
           path: '/url/test'
           method: 'get'
+          cors: true
       - sqs:
           arn: !GetAtt testQueue.Arn
     environment: 
@@ -164,11 +164,11 @@ functions:
     name: ${self:custom.STAGE}-Test-Function2
     runtime: nodejs18.x
     handler: './controllers/test2/test_run.handler'
-    cors: true
     events: 
       - http:
           path: '/url/test2'
           method: 'get'
+          cors: true
     package:
       patterns:
         - 'controllers/test2/*'
@@ -183,7 +183,6 @@ functions:
     name: ${self:custom.STAGE}-Demo-Function
     runtime: nodejs18.x
     handler: './controllers/test/demo_run.handler'
-    cors: true
     package:
       patterns:
         - 'controllers/**'
@@ -191,6 +190,7 @@ functions:
       - http:
           path: '/url/demo'
           method: 'get'
+          cors: true
       - sqs:
           arn: !GetAtt demoQueue.Arn
     environment: 
@@ -204,7 +204,6 @@ functions:
     name: ${self:custom.STAGE}-Publisher-Function
     runtime: nodejs18.x
     handler: './controllers/test/sqsPublisher.handler'
-    cors: true
     package:
       patterns:
         - 'controllers/**'
@@ -215,6 +214,7 @@ functions:
       - http:
           path: '/url/publish'
           method: 'get'
+          cors: true
     layers:
       - !Ref UtilsLayerLambdaLayer # The name is `${layerName}LambdaLayer`, the string "LambdaLayer" has to be appended as per docs
 
