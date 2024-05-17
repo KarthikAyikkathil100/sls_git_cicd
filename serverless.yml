@@ -79,7 +79,12 @@ resources:
                     - 'ssm:GetParametersByPath'
                     - 'ssm:GetParameters'
                     - 'ssm:GetParameter'
-                  Resource: !Sub 'arn:aws:ssm:${self:custom.REGION}:${self:custom.ACCOUNT_ID}:parameter/routeme/${self:custom.STAGE}/*'
+                  Resource: 
+                    Fn::Sub: 
+                      - 'arn:aws:ssm:${REGION}:${ACCOUNT_ID}:parameter/routeme/${STAGE}/*'
+                      - REGION: ${self:custom.REGION}
+                        ACCOUNT_ID: ${self:custom.ACCOUNT_ID}
+                        STAGE: ${self:custom.STAGE}
 
     # ---- Batch related configuration ---
     # JobExecutionRole:
