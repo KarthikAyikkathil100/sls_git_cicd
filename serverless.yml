@@ -5,14 +5,13 @@ provider:
   runtime: nodejs18.x
   region: us-east-1
   stage: ${opt:stage}
-  exclude:
-    - "**/*"  # quotes(") are needed
 
 package:
   individually: true
   patterns:
     - '!layers/utils/nodejs/node18/node_modules/@AwsHelpers/node_modules/**'
     - '!containers/**'
+    - '!**/*'
 
 custom:
   ACCOUNT_ID: !Ref AWS::AccountId
