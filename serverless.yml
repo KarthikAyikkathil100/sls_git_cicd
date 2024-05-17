@@ -9,7 +9,7 @@ provider:
 package:
   individually: true
   patterns:
-    - "!*/**"
+    - '!*/**'
 
 custom:
   ACCOUNT_ID: !Ref AWS::AccountId
@@ -144,6 +144,9 @@ functions:
     name: ${self:custom.STAGE}-Test-Function
     runtime: nodejs18.x
     handler: './controllers/test/test.handler'
+    package:
+      patterns:
+        - 'controllers/**'
     events: 
       - http:
           path: '/url/test'
@@ -173,6 +176,9 @@ functions:
     name: ${self:custom.STAGE}-Demo-Function
     runtime: nodejs18.x
     handler: './controllers/test/demo_run.handler'
+    package:
+      patterns:
+        - 'controllers/**'
     events: 
       - http:
           path: '/url/demo'
@@ -190,6 +196,9 @@ functions:
     name: ${self:custom.STAGE}-Publisher-Function
     runtime: nodejs18.x
     handler: './controllers/test/sqsPublisher.handler'
+    package:
+      patterns:
+        - 'controllers/**'
     role: TestQueuePublishRole
     environment: 
       QueueURL: !Ref testQueue
