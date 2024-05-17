@@ -9,7 +9,7 @@ provider:
 package:
   individually: true
   patterns:
-    - "!./**"
+    - "!*/**"
 
 custom:
   ACCOUNT_ID: !Ref AWS::AccountId
