@@ -9,7 +9,10 @@ provider:
 package:
   individually: true
   patterns:
-    - '!*/**'
+    - '!layers/**'
+    - '!controllers/**'
+    - '!containers/**'
+    - '!sservices/**'
 
 custom:
   ACCOUNT_ID: !Ref AWS::AccountId
