@@ -1,8 +1,10 @@
 const { addUpdateBonusValidation } = require("../../services/Validations/testValidations");
+const { getByName } = require('@AwsHelpers/index.js')
 
 exports.handler = async (event, context, callback) => {
     try {
-        console.warn('Hello from lambda');
+        const dbName = await getByName('db_name');
+        console.log('DB NAME => ', dbName)
         // This fn should push record to queue
         addUpdateBonusValidation({
             id: "dcv"
