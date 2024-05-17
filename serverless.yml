@@ -56,6 +56,30 @@ resources:
                     - 'sqs:GetQueueUrl'
                     - 'sqs:SendMessageBatch'
                   Resource: !GetAtt testQueue.Arn
+    Role1:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${self:custom.STAGE}-Role
+        AssumeRolePolicyDocument: # This is a required property, this defines to what or whom this role can be applied
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:  # This defines the resource/service/user..etc to which the role can be applied
+                  - lambda.amazonaws.com # Here, this role can be assigned to any of the lambdas function 
+              Action: 
+                - sts:AssumeRole # This action can be taken by the above mentioned resource/service/user. (sts:AssumeRole means the person in Principal can assume this role, in our case we are giving power to all lambda function to assume this role, if role got assigned to a lambda fn)
+        Policies:
+          - PolicyName: Policy1
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - 'ssm:GetParametersByPath'
+                    - 'ssm:GetParameters'
+                    - 'ssm:GetParameter'
+                  Resource: !Sub 'arn:aws:ssm:${self:custom.REGION}:${self:custom.ACCOUNT_ID}:parameter/routeme/${self:custom.STAGE}/*'
 
     # ---- Batch related configuration ---
     # JobExecutionRole:
@@ -164,6 +188,7 @@ functions:
     name: ${self:custom.STAGE}-Test-Function2
     runtime: nodejs18.x
     handler: './controllers/test2/test_run.handler'
+    role: Role1
     events: 
       - http:
           path: '/url/test2'
