@@ -147,6 +147,7 @@ functions:
     name: ${self:custom.STAGE}-Test-Function
     runtime: nodejs18.x
     handler: './controllers/test/test.handler'
+    cors: true
     package:
       patterns:
         - 'controllers/**'
@@ -163,6 +164,7 @@ functions:
     name: ${self:custom.STAGE}-Test-Function2
     runtime: nodejs18.x
     handler: './controllers/test2/test_run.handler'
+    cors: true
     events: 
       - http:
           path: '/url/test2'
@@ -181,6 +183,7 @@ functions:
     name: ${self:custom.STAGE}-Demo-Function
     runtime: nodejs18.x
     handler: './controllers/test/demo_run.handler'
+    cors: true
     package:
       patterns:
         - 'controllers/**'
@@ -201,6 +204,7 @@ functions:
     name: ${self:custom.STAGE}-Publisher-Function
     runtime: nodejs18.x
     handler: './controllers/test/sqsPublisher.handler'
+    cors: true
     package:
       patterns:
         - 'controllers/**'
